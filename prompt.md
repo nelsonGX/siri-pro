@@ -25,7 +25,6 @@ iPhone API:
 - take_photo() : 拍照並回傳畫面
 Other API:
 - search_google(query=<query:str>) : 搜尋 Google
-- view_website(url=<url:str>) : 瀏覽網站
 - exec_py_code(code=<code:str>) : 執行 python 程式。可以多行，使用"""將程式包起來。
 ```
 
