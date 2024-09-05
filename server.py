@@ -42,7 +42,7 @@ async def return_value():
         if "image" in (await request.files):
             return_message = await process_message(await request.form, (await request.files)["image"] , True, str(ip))
         else:
-            return_message = await process_message(await request.form, None, True)
+            return_message = await process_message(await request.form, None, True, str(ip))
 
         if "error" in return_message:
             return jsonify({"error": "ERROR"}), 500
