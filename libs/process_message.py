@@ -44,8 +44,8 @@ async def process_server_functions(action, params):
         return await search_google(query)
     return None
 
-async def process_message(request_form, image, is_return):
-    print("# [process_message.py] [process_message] Processing Message...")
+async def process_message(request_form, image, is_return, user_ip):
+    print("# [process_message.py] [process_message] Processing Message... IP: " + user_ip)
 
     global is_first
     global location
@@ -64,12 +64,12 @@ async def process_message(request_form, image, is_return):
         prompt = request_form['prompt']
     
     if not image:
-        return_message, return_message_processed = await call_ai(prompt, is_first, False, None, None, location)
+        return_message, return_message_processed = await call_ai(prompt, is_first, False, None, None, location, user_ip)
 
     else:
         image_data, media_type = process_image(image)
         encoded_image = base64.b64encode(image_data).decode('utf-8')
-        return_message, return_message_processed = await call_ai(prompt, is_first, True, media_type, encoded_image, location)
+        return_message, return_message_processed = await call_ai(prompt, is_first, True, media_type, encoded_image, location, user_ip)
 
     if return_message.startswith("[ERROR]"):
         return {"error": True}
@@ -83,7 +83,7 @@ async def process_message(request_form, image, is_return):
                 action_name = "\n(執行了一些程式碼)\n\n"
             elif action == "search_google":
                 action_name = "\n(搜尋了一些東西)\n\n"
-            return_message1, return_message_processed1 = await call_ai("[SYSTEM] " + check_server, False, False, None, None, location)
+            return_message1, return_message_processed1 = await call_ai("[SYSTEM] " + check_server, False, False, None, None, location, user_ip)
             return {"response": return_message_processed + action_name + return_message_processed1}
         
         return {"response": return_message_processed, "action": {"name": action, "variables": params}}

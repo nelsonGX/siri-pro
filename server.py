@@ -17,7 +17,11 @@ async def check():
 async def ask():
     print("# [server.py] [ask] Request received")
     try:
-        return_messasge = await process_message(await request.form, await request.files, False)
+        ip = request.remote_addr
+        if ip == "127.0.0.1":
+            ip = request.headers["CF-Connecting-IP"]
+        print("# [server.py] [ask] User IP: " + str(ip))
+        return_messasge = await process_message(await request.form, await request.files, False, str(ip))
         
         if "error" in return_messasge:
             return jsonify({"error": "ERROR"}), 500
@@ -30,8 +34,13 @@ async def ask():
 async def return_value():
     print("# [server.py] [return_value] Request received")
     try:
+        print("# [server.py] [test] Request received")
+        ip = request.remote_addr
+        if ip == "127.0.0.1":
+            ip = request.headers["CF-Connecting-IP"]
+        print("# [server.py] [return_value] User IP: " + str(ip))
         if "image" in (await request.files):
-            return_message = await process_message(await request.form, (await request.files)["image"] , True)
+            return_message = await process_message(await request.form, (await request.files)["image"] , True, str(ip))
         else:
             return_message = await process_message(await request.form, None, True)
 
@@ -43,4 +52,5 @@ async def return_value():
         return jsonify({"error": "ERROR"}), 500
 
 if __name__ == '__main__':
+
     app.run(host="0.0.0.0")

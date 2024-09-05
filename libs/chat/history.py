@@ -3,7 +3,7 @@ import re
 import time
 import aiofiles
 
-history = []
+history = {}
 
 def process_text(input_text):
     print("# [history.py] [process_text] Processing Text...")
@@ -24,19 +24,19 @@ async def read_prompt(location):
     print("# [history.py] [read_prompt] System Prompt: " + system_prompt[:50] + "...")
     return system_prompt
 
-async def call_ai(prompt, is_first, has_image, media_type, encoded_image, location):
-    print("# [history.py] [call_ai] Calling AI...")
+async def call_ai(prompt, is_first, has_image, media_type, encoded_image, location, user_ip):
+    print("# [history.py] [call_ai] Calling AI... IP: " + user_ip)
 
     global history
 
     system_prompt = await read_prompt(location)
 
-    print("# [history.py] [call_ai] User Prompt: " + prompt)
+    print("# [history.py] [call_ai] User (IP:" + user_ip + ") Prompt: " + prompt)
     if is_first:
-        history = []
+        history[user_ip] = []
 
     if has_image and len(prompt) > 0:
-        history.append(
+        history[user_ip].append(
             {
                 "role": "user",
                 "content": [
@@ -56,7 +56,7 @@ async def call_ai(prompt, is_first, has_image, media_type, encoded_image, locati
             }
         )
     elif has_image:
-        history.append(
+        history[user_ip].append(
             {
                 "role": "user",
                 "content": [
@@ -72,7 +72,7 @@ async def call_ai(prompt, is_first, has_image, media_type, encoded_image, locati
             }
         )
     else:
-        history.append(
+        history[user_ip].append(
             {
                 "role": "user",
                 "content": [
@@ -84,10 +84,10 @@ async def call_ai(prompt, is_first, has_image, media_type, encoded_image, locati
             }
         )
 
-    response = await generate_response(history, system_prompt)
+    response = await generate_response(history[user_ip], system_prompt)
     response_processed = process_text(response)
 
-    history.append(
+    history[user_ip].append(
         {
             "role": "assistant",
             "content": [
