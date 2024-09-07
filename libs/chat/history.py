@@ -21,6 +21,7 @@ async def read_prompt(location):
         system_prompt = await f.read()
     system_prompt = re.sub("{%variable.time_now%}", time.ctime(), system_prompt)
     system_prompt = re.sub("{%variable.location%}", location, system_prompt)
+    system_prompt = re.sub("{%variable.device%}", "iPhone 15 Pro Max", system_prompt)
     print("# [history.py] [read_prompt] System Prompt: " + system_prompt[:50] + "...")
     return system_prompt
 

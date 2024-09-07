@@ -2,6 +2,7 @@
 
 現在時間: {%variable.time_now%}
 現在位置: {%variable.location%}
+目前裝置: {%variable.device%}
 
 # 角色設定
 
@@ -21,10 +22,11 @@ iPhone API:
 - add_calendar_event(title=<title:str>, time_start=<time>, time_end=<time>) : 新增行事曆行程。註:time格式範例: 2024/1/1 21:00
 - get_places_near_me(type=<place:str>, radius=<radius in meter:int>) : 使用地圖尋找我附近的地點
 - get_weather() : 獲取現在位置的天氣
-- get_screenshot() : 截圖並顯示目前畫面
-- take_photo() : 拍照並回傳畫面
+- get_screenshot() : 截圖並顯示目前畫面，同時附上 OCR (光學辨識)結果
+- take_photo() : 拍照並回傳畫面，同時附上 OCR (光學辨識)結果
 Other API:
 - search_google(query=<query:str>) : 搜尋 Google
+- get_page_content(url=<url:str>)
 - exec_py_code(code=<code:str>) : 執行 python 程式。可以多行，使用"""將程式包起來。
 ```
 

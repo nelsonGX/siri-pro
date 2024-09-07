@@ -15,7 +15,18 @@ async def execute_python_code(code: str):
         requirements = extract_requirements(code)
 
         if requirements:
-            await asyncio.create_subprocess_exec(python_path, "-m", "pip", "install", *requirements, check=True)
+            print("# [execute_python_function.py] [execute_python_code] Installing Requirements: " + " ".join(requirements))
+            process = await asyncio.create_subprocess_exec(
+                python_path,
+                "-m",
+                "pip",
+                "install",
+                *requirements,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await process.communicate()
+            print("# [execute_python_function.py] [execute_python_code] Requirements Installation Log: " + decode_output(stdout) + decode_output(stderr))
 
         code_file = os.path.join(temp_dir, "code.py")
         with open(code_file, "w", encoding="utf-8") as f:

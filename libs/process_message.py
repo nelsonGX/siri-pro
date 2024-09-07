@@ -2,6 +2,7 @@ from libs.process_image import process_image
 from libs.chat.history import call_ai
 from libs.functions.execute_python_function import execute_python_code
 from libs.functions.search_google import search_google
+from libs.functions.get_page import get_page_content
 import base64
 import re
 
@@ -42,6 +43,9 @@ async def process_server_functions(action, params):
     elif action == "search_google":
         query = params["query"]
         return await search_google(query)
+    elif action == "get_page_content":
+        url = params["url"]
+        return await get_page_content(url)
     return None
 
 async def process_message(request_form, image, is_return, user_ip):
@@ -83,6 +87,8 @@ async def process_message(request_form, image, is_return, user_ip):
                 action_name = "\n(執行了一些程式碼)\n\n"
             elif action == "search_google":
                 action_name = "\n(搜尋了一些東西)\n\n"
+            elif action == "get_page_content":
+                action_name = "\n(讀取了網頁內容)\n\n"
             return_message1, return_message_processed1 = await call_ai("[SYSTEM] " + check_server, False, False, None, None, location, user_ip)
             return {"response": return_message_processed + action_name + return_message_processed1}
         
