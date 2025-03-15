@@ -7,7 +7,7 @@ async def generate_response(history, system_prompt):
     print("# [llm.py] [generate_response] Generating Response...")
     try:
         message = anthropic.messages.create(
-            model="claude-3-5-sonnet-20240620",
+            model="claude-3-7-sonnet-20250219",
             max_tokens=1024,
             system=system_prompt,
             messages=history
