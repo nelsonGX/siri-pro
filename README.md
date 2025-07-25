@@ -9,6 +9,12 @@ An Anthropic API Key is required. Get it here: https://console.anthropic.com/log
 
 Second, you have to install requirements and run the server.
 
+using uv:
+```shell
+uv run server.py
+```
+
+without uv:
 ```shell
 pip3 install -r requirements.txt
 python3 server.py
